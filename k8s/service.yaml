@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: biroapp
+spec:
+  type: ClusterIP
+  selector:
+    app: biroapp
+  ports:
+    - name: http
+      port: 80
+      targetPort: 5217
+      protocol: TCP

@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: biroapp
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: biroapp
+  template:
+    metadata:
+      labels:
+        app: biroapp
+    spec:
+      containers:
+        - name: biroapp
+          image: docker.io/iheanyi014/biroapp:1.0.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 5217
+          env:
+            - name: ASPNETCORE_URLS
+              value: "http://+:5217"
+            - name: ASPNETCORE_ENVIRONMENT
+              value: "Production"
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          startupProbe:
+            tcpSocket:
+              port: http
+            periodSeconds: 5
+            failureThreshold: 30
+          readinessProbe:
+            tcpSocket:
+              port: http
+            periodSeconds: 5
+          livenessProbe:
+            tcpSocket:
+              port: http
+            periodSeconds: 10
